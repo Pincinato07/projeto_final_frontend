@@ -1,3 +1,5 @@
+'use client'
+
 import { GalleryVerticalEnd } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -10,14 +12,40 @@ import {
   FieldSeparator,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { useState } from "react"
+import { authClient } from "@/lib/auth-client"
+import { redirect } from "next/navigation"
+import { Spinner } from "@/components/ui/spinner"
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+
+  function handleLogin(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    const formData = new FormData(event.currentTarget)
+    const email = formData.get("email") as string
+    const senha = formData.get("senha") as string
+
+    authClient.signIn.email(
+      {
+        email: email,
+        password: senha,
+      },
+      {
+        onSuccess: () => redirect("/dashboard"),
+        onRequest: () => setLoading(true),
+        onResponse: () => setLoading(false),
+        onError: (ctx) => setError(ctx.error.message),
+      }
+    )
+  }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <form>
+      <form onSubmit={handleLogin}>
         <FieldGroup>
           <div className="flex flex-col items-center gap-2 text-center">
             <a
@@ -29,9 +57,9 @@ export function LoginForm({
               </div>
               <span className="sr-only">Acme Inc.</span>
             </a>
-            <h1 className="text-xl font-bold">Welcome to Acme Inc.</h1>
+            <h1 className="text-xl font-bold">Faça login</h1>
             <FieldDescription>
-              Don&apos;t have an account? <a href="#">Sign up</a>
+              Não possui conta? <a href="/register">Registre-se</a>
             </FieldDescription>
           </div>
           <Field>
@@ -41,11 +69,23 @@ export function LoginForm({
               type="email"
               placeholder="m@example.com"
               required
+              name="email"
             />
           </Field>
           <Field>
-            <Button type="submit">Login</Button>
+            <FieldLabel htmlFor="senha">Senha</FieldLabel>
+            <Input id="senha" type="password" placeholder="••••••••" required name="senha" />
           </Field>
+          <Field>
+            <Button type="submit" disabled={loading}>
+              {loading ? <Spinner /> : "Login"}
+            </Button>
+          </Field>
+          {error && (
+            <Field>
+              <FieldDescription className="text-destructive">{error}</FieldDescription>
+            </Field>
+          )}
           <FieldSeparator>Or</FieldSeparator>
           <Field className="grid gap-4 sm:grid-cols-2">
             <Button variant="outline" type="button">
@@ -70,8 +110,7 @@ export function LoginForm({
         </FieldGroup>
       </form>
       <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
+        By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
       </FieldDescription>
     </div>
   )
