@@ -1,6 +1,6 @@
 'use server'
 
-import prisma from '@delivery/db'
+import prisma from '@/lib/prisma-client'
 import { revalidatePath } from 'next/cache'
 
 export async function criarCategoria(formData: FormData) {
@@ -11,7 +11,7 @@ export async function criarCategoria(formData: FormData) {
   }
 
   try {
-    await prisma.categorias.create({
+    await prisma.categoria.create({
       data: {
         nome: nome.trim(),
       },
@@ -33,7 +33,7 @@ export async function editarCategoria(id: string, formData: FormData) {
   }
 
   try {
-    await prisma.categorias.update({
+    await prisma.categoria.update({
       where: { id },
       data: {
         nome: nome.trim(),
@@ -50,7 +50,7 @@ export async function editarCategoria(id: string, formData: FormData) {
 
 export async function excluirCategoria(id: string) {
   try {
-    await prisma.categorias.delete({
+    await prisma.categoria.delete({
       where: { id },
     })
 
