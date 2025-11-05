@@ -23,25 +23,48 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const [emailError, setEmailError] = useState("")
+  const [senhaError, setSenhaError] = useState("")
 
-  function handleLogin(event: React.FormEvent<HTMLFormElement>) {
+  async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
     const email = formData.get("email") as string
     const senha = formData.get("senha") as string
 
-    authClient.signIn.email(
-      {
-        email: email,
-        password: senha,
-      },
-      {
-        onSuccess: () => redirect("/dashboard"),
-        onRequest: () => setLoading(true),
-        onResponse: () => setLoading(false),
-        onError: (ctx) => setError(ctx.error.message),
-      }
-    )
+    setError("")
+    setEmailError("")
+    setSenhaError("")
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    let hasError = false
+    if (!email || !emailRegex.test(email)) {
+      setEmailError("Informe um email válido.")
+      hasError = true
+    }
+    if (!senha || senha.length < 6) {
+      setSenhaError("A senha deve ter ao menos 6 caracteres.")
+      hasError = true
+    }
+    if (hasError) return
+
+    try {
+      await authClient.signIn.email(
+        {
+          email: email,
+          password: senha,
+        },
+        {
+          onSuccess: () => redirect("/dashboard"),
+          onRequest: () => setLoading(true),
+          onResponse: () => setLoading(false),
+          onError: (ctx) => setError(ctx.error.message || "Falha ao entrar. Tente novamente."),
+        }
+      )
+    } catch (e) {
+      setLoading(false)
+      setError("Não foi possível conectar. Verifique sua conexão e tente novamente.")
+    }
   }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -71,10 +94,16 @@ export function LoginForm({
               required
               name="email"
             />
+            {emailError && (
+              <FieldDescription className="text-destructive">{emailError}</FieldDescription>
+            )}
           </Field>
           <Field>
             <FieldLabel htmlFor="senha">Senha</FieldLabel>
             <Input id="senha" type="password" placeholder="••••••••" required name="senha" />
+            {senhaError && (
+              <FieldDescription className="text-destructive">{senhaError}</FieldDescription>
+            )}
           </Field>
           <Field>
             <Button type="submit" disabled={loading}>
@@ -83,7 +112,7 @@ export function LoginForm({
           </Field>
           {error && (
             <Field>
-              <FieldDescription className="text-destructive">{error}</FieldDescription>
+              <FieldDescription className="text-destructive" aria-live="polite">{error}</FieldDescription>
             </Field>
           )}
           <FieldSeparator>Or</FieldSeparator>
