@@ -69,3 +69,8 @@ model Verification {
 
   @@map("verification")
 }
+
+model Categorias {
+  id   String @id @default(uuid())
+  nome String
+}
