@@ -11,7 +11,7 @@ export async function criarCategoria(formData: FormData) {
   }
 
   try {
-    await prisma.categoria.create({
+    await prisma.categorias.create({
       data: {
         nome: nome.trim(),
       },
@@ -33,7 +33,7 @@ export async function editarCategoria(id: string, formData: FormData) {
   }
 
   try {
-    await prisma.categoria.update({
+    await prisma.categorias.update({
       where: { id },
       data: {
         nome: nome.trim(),
@@ -50,7 +50,7 @@ export async function editarCategoria(id: string, formData: FormData) {
 
 export async function excluirCategoria(id: string) {
   try {
-    await prisma.categoria.delete({
+    await prisma.categorias.delete({
       where: { id },
     })
 

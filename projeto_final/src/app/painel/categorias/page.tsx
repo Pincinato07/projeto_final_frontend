@@ -5,9 +5,9 @@ import EditCategoria from './_components/edit-categoria'
 import DeleteCategoria from './_components/delete-categoria'
 
 export default async function CategoriasPage() {
-  const categorias = await prisma.categoria.findMany({
+  const categorias = await prisma.categorias.findMany({
     orderBy: {
-      nome: 'asc'
+      nome: 'asc'   
     }
   })
 
@@ -25,7 +25,7 @@ export default async function CategoriasPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {categorias.map(categoria => (
+          {categorias.map((categoria: { id: string; nome: string }) => (
             <Card key={categoria.id} className="transition-shadow hover:shadow-md">
               <CardHeader className="pb-3">
                 <CardTitle className="line-clamp-1 text-lg">{categoria.nome}</CardTitle>
