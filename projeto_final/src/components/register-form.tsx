@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { authClient } from "@/lib/auth-client"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Spinner } from "@/components/ui/spinner"
 
 export function RegisterForm({
@@ -25,6 +25,7 @@ export function RegisterForm({
   const [nameError, setNameError] = useState("")
   const [emailError, setEmailError] = useState("")
   const [senhaError, setSenhaError] = useState("")
+  const router = useRouter()
 
   async function handleRegister(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -62,10 +63,19 @@ export function RegisterForm({
           password: senha,
         },
         {
-          onSuccess: () => redirect("/login"),
+          onSuccess: () => router.push("/login"),
           onRequest: () => setLoading(true),
           onResponse: () => setLoading(false),
-          onError: (ctx) => setError(ctx.error.message || "Falha ao registrar. Tente novamente."),
+          onError: (ctx) => {
+            const message = ctx?.error?.message || ""
+            const status = (ctx as any)?.response?.status
+            if (status === 422 || /exist/i.test(message) || /já existe|cadastrad/i.test(message)) {
+              setEmailError("Este e-mail já está cadastrado.")
+              setError("")
+              return
+            }
+            setError(message || "Falha ao registrar. Tente novamente.")
+          },
         }
       )
     } catch (e) {

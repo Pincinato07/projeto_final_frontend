@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
 import { authClient } from "@/lib/auth-client"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Spinner } from "@/components/ui/spinner"
 
 export function LoginForm({
@@ -25,6 +25,7 @@ export function LoginForm({
   const [error, setError] = useState("")
   const [emailError, setEmailError] = useState("")
   const [senhaError, setSenhaError] = useState("")
+  const router = useRouter()
 
   async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -55,7 +56,7 @@ export function LoginForm({
           password: senha,
         },
         {
-          onSuccess: () => redirect("/dashboard"),
+          onSuccess: () => router.push("/painel"),
           onRequest: () => setLoading(true),
           onResponse: () => setLoading(false),
           onError: (ctx) => setError(ctx.error.message || "Falha ao entrar. Tente novamente."),
