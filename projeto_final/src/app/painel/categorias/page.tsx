@@ -5,7 +5,7 @@ import EditCategoria from './_components/edit-categoria'
 import DeleteCategoria from './_components/delete-categoria'
 
 export default async function CategoriasPage() {
-  const categorias = await prisma.categorias.findMany({
+  const categorias = await prisma.categoria.findMany({
     orderBy: {
       nome: 'asc'   
     }
