@@ -71,8 +71,48 @@ model Verification {
 }
 
 model Categoria {
-  id   String @id @default(uuid())
-  nome String
+  id       String   @id @default(uuid())
+  nome     String
+  produtos Produto[]
 
   @@map("categoria")
+}
+
+model Produto {
+  id          String    @id @default(uuid())
+  nome        String
+  descricao   String?
+  preco       Float
+  categoriaId String
+  categoria   Categoria @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
+  pedidoItems PedidoItem[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("produto")
+}
+
+model Pedido {
+  id          String       @id @default(uuid())
+  clienteNome String
+  endereco    String
+  telefone    String
+  itens       PedidoItem[]
+  status      String       @default("pendente")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@map("pedido")
+}
+
+model PedidoItem {
+  id         String  @id @default(uuid())
+  pedidoId   String
+  pedido     Pedido  @relation(fields: [pedidoId], references: [id], onDelete: Cascade)
+  produtoId  String
+  produto    Produto @relation(fields: [produtoId], references: [id])
+  quantidade Int
+  preco      Float
+
+  @@map("pedido_item")
 }
