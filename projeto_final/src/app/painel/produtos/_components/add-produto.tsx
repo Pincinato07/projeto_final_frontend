@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useState, useTransition, useEffect } from 'react'
+import Link from 'next/link'
 import { criarProduto, listarCategorias } from '../actions'
 import { toast } from 'sonner'
 
@@ -51,6 +52,39 @@ export default function AddProduto() {
         setOpen(false)
       }
     })
+  }
+
+  if (categorias.length === 0) {
+    return (
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button>Adicionar Produto</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[425px] md:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Nenhuma Categoria Encontrada</DialogTitle>
+            <DialogDescription>
+              Você precisa cadastrar pelo menos uma categoria antes de adicionar produtos.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <p className="text-sm text-muted-foreground mb-4">
+              Por favor, crie uma categoria primeiro para poder adicionar produtos.
+            </p>
+            <Button asChild className="w-full">
+              <Link href="/painel/categorias">
+                Ir para Categorias
+              </Link>
+            </Button>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Fechar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
   }
 
   return (
