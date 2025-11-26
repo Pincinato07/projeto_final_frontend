@@ -21,7 +21,8 @@ const produtoSchema = z.object({
     })
     .positive('O preço deve ser maior que zero')
     .min(0.01, 'O preço deve ser maior que zero'),
-  categoriaId: z.string().min(1, 'Selecione uma categoria')
+  categoriaId: z.string().min(1, 'Selecione uma categoria'),
+  imagem: z.string().url('URL da imagem inválida').optional().or(z.literal('')),
 })
 
 type ProdutoInput = z.infer<typeof produtoSchema>
@@ -32,7 +33,8 @@ export async function criarProduto(formData: FormData) {
     nome: formData.get('nome') as string,
     descricao: formData.get('descricao') as string || '',
     preco: formData.get('preco') ? Number(formData.get('preco')) : 0,
-    categoriaId: formData.get('categoriaId') as string
+    categoriaId: formData.get('categoriaId') as string,
+    imagem: formData.get('imagem') as string || '',
   }
 
   // Validar os dados com Zod
@@ -45,17 +47,15 @@ export async function criarProduto(formData: FormData) {
   }
 
   try {
-    await prisma.$executeRaw`
-      INSERT INTO produto (nome, descricao, preco, categoria_id, created_at, updated_at)
-      VALUES (
-        ${result.data.nome.trim()},
-        ${result.data.descricao?.trim() || null},
-        ${Number(result.data.preco)},
-        ${result.data.categoriaId},
-        NOW(),
-        NOW()
-      )
-    `
+    await prisma.produto.create({
+      data: {
+        nome: result.data.nome.trim(),
+        descricao: result.data.descricao?.trim() || null,
+        preco: Number(result.data.preco),
+        categoriaId: result.data.categoriaId,
+        imagem: result.data.imagem || null,
+      }
+    })
 
     revalidatePath('/painel/produtos')
     return { success: true }
@@ -71,7 +71,8 @@ export async function editarProduto(id: string, formData: FormData) {
     nome: formData.get('nome') as string,
     descricao: formData.get('descricao') as string || '',
     preco: formData.get('preco') ? formData.get('preco') : '0',
-    categoriaId: formData.get('categoriaId') as string
+    categoriaId: formData.get('categoriaId') as string,
+    imagem: formData.get('imagem') as string || '',
   }
 
   // Validar os dados com Zod
@@ -84,16 +85,16 @@ export async function editarProduto(id: string, formData: FormData) {
   }
 
   try {
-    await prisma.$executeRaw`
-      UPDATE produto
-      SET 
-        nome = ${result.data.nome.trim()},
-        descricao = ${result.data.descricao?.trim() || null},
-        preco = ${Number(result.data.preco)},
-        categoria_id = ${result.data.categoriaId},
-        updated_at = NOW()
-      WHERE id = ${id}
-    `
+    await prisma.produto.update({
+      where: { id },
+      data: {
+        nome: result.data.nome.trim(),
+        descricao: result.data.descricao?.trim() || null,
+        preco: Number(result.data.preco),
+        categoriaId: result.data.categoriaId,
+        imagem: result.data.imagem || null,
+      }
+    })
 
     revalidatePath('/painel/produtos')
     return { success: true }

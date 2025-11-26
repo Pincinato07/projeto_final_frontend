@@ -10,6 +10,7 @@ type Produto = {
   nome: string
   descricao: string | null
   preco: number
+  imagem: string | null
   categoriaId: string
   categoria: {
     id: string
@@ -42,7 +43,16 @@ export default async function ProdutosPage() {
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {produtos.map((produto: Produto) => (
-            <Card key={produto.id} className="flex flex-col justify-between">
+            <Card key={produto.id} className="flex flex-col justify-between overflow-hidden">
+              {produto.imagem && (
+                <div className="aspect-video relative">
+                  <img
+                    src={produto.imagem}
+                    alt={produto.nome}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
               <CardHeader className="pb-3">
                 <CardTitle className="line-clamp-1 text-lg">{produto.nome}</CardTitle>
                 <p className="text-sm text-muted-foreground">{produto.categoria.nome}</p>
@@ -61,6 +71,7 @@ export default async function ProdutosPage() {
                   nome: produto.nome,
                   descricao: produto.descricao,
                   preco: produto.preco,
+                  imagem: produto.imagem,
                   categoriaId: produto.categoriaId,
                   categoria: {
                     id: produto.categoria.id,

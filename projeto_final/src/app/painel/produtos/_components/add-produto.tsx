@@ -162,6 +162,20 @@ export default function AddProduto() {
                 </SelectContent>
               </Select>
             </div>
+
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="imagem" className="text-right">
+                Imagem
+              </Label>
+              <Input
+                id="imagem"
+                name="imagem"
+                type="url"
+                placeholder="https://exemplo.com/imagem.jpg"
+                className="col-span-3"
+                disabled={isPending}
+              />
+            </div>
           </div>
           
           <DialogFooter>
