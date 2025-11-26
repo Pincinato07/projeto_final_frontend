@@ -31,35 +31,40 @@ export default function UserMenu() {
   }
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline">{session.user.name}</Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-sm text-muted-foreground">
-          {session.user.email}
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Button
-            variant="destructive"
-            className="w-full"
-            onClick={() => {
-              authClient.signOut({
-                fetchOptions: {
-                  onSuccess: () => {
-                    router.push("/login")
+    <div className="flex items-center gap-2">
+      <Button variant="ghost" size="sm" asChild>
+        <Link href="/">🍕 Ver Loja</Link>
+      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline">{session.user.name}</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>Minha Conta</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="text-sm text-muted-foreground">
+            {session.user.email}
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem asChild>
+            <Button
+              variant="destructive"
+              className="w-full"
+              onClick={() => {
+                authClient.signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      router.push("/login")
+                    },
                   },
-                },
-              })
-            }}
-          >
-            Sair
-          </Button>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+                })
+              }}
+            >
+              Sair
+            </Button>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
   )
 }
