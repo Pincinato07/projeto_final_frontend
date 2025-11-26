@@ -5,6 +5,7 @@ import {
   IconDatabase,
   IconFolder,
   IconListDetails,
+  IconPhoto,
 } from "@tabler/icons-react"
 import {
   Sidebar,
@@ -35,6 +36,11 @@ const data = {
       name: "Pedidos",
       link: "/painel/pedidos" as const,
       icon: IconListDetails,
+    },
+    {
+      name: "Banners",
+      link: "/painel/banners" as const,
+      icon: IconPhoto,
     },
   ],
 }
