@@ -21,12 +21,18 @@ interface EditCategoriaProps {
   categoria: {
     id: string
     nome: string
+    slug: string
+    cor: string
+    imagem: string | null
   }
 }
 
 export default function EditCategoria({ categoria }: EditCategoriaProps) {
   const [open, setOpen] = useState(false)
   const [isPending, startTransition] = useTransition()
+  const [nome, setNome] = useState(categoria.nome)
+  const [slug, setSlug] = useState(categoria.slug)
+  const [cor, setCor] = useState(categoria.cor)
 
   async function handleSubmit(formData: FormData) {
     startTransition(async () => {
@@ -52,7 +58,7 @@ export default function EditCategoria({ categoria }: EditCategoriaProps) {
         <DialogHeader>
           <DialogTitle>Editar Categoria</DialogTitle>
           <DialogDescription>
-            Altere o nome da categoria.
+            Altere as informações da categoria.
           </DialogDescription>
         </DialogHeader>
         <form action={handleSubmit}>
@@ -62,9 +68,57 @@ export default function EditCategoria({ categoria }: EditCategoriaProps) {
               <Input
                 id="nome"
                 name="nome"
-                defaultValue={categoria.nome}
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
                 placeholder="Ex: Pizzas, Bebidas, Sobremesas..."
                 required
+                disabled={isPending}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="slug">Slug (URL)</Label>
+              <Input
+                id="slug"
+                name="slug"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+                placeholder="ex: pizzas"
+                required
+                disabled={isPending}
+              />
+              <p className="text-xs text-muted-foreground">
+                Será usado na URL: /categoria/{slug || 'exemplo'}
+              </p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="cor">Cor</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="cor"
+                  name="cor"
+                  type="color"
+                  value={cor}
+                  onChange={(e) => setCor(e.target.value)}
+                  className="w-16 h-10 p-1 cursor-pointer"
+                  disabled={isPending}
+                />
+                <Input
+                  value={cor}
+                  onChange={(e) => setCor(e.target.value)}
+                  placeholder="#3b82f6"
+                  className="flex-1"
+                  disabled={isPending}
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="imagem">URL da Imagem (opcional)</Label>
+              <Input
+                id="imagem"
+                name="imagem"
+                type="url"
+                defaultValue={categoria.imagem || ''}
+                placeholder="https://exemplo.com/imagem.jpg"
                 disabled={isPending}
               />
             </div>

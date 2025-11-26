@@ -4,6 +4,14 @@ import AddCategorias from './_components/add-categorias'
 import EditCategoria from './_components/edit-categoria'
 import DeleteCategoria from './_components/delete-categoria'
 
+type Categoria = {
+  id: string
+  nome: string
+  slug: string
+  cor: string
+  imagem: string | null
+}
+
 export default async function CategoriasPage() {
   const categorias = await prisma.categoria.findMany({
     orderBy: {
@@ -25,13 +33,28 @@ export default async function CategoriasPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {categorias.map((categoria: { id: string; nome: string }) => (
-            <Card key={categoria.id} className="transition-shadow hover:shadow-md">
-              <CardHeader className="pb-3">
-                <CardTitle className="line-clamp-1 text-lg">{categoria.nome}</CardTitle>
+          {categorias.map((categoria: Categoria) => (
+            <Card key={categoria.id} className="transition-shadow hover:shadow-md overflow-hidden">
+              {categoria.imagem && (
+                <div className="aspect-video relative">
+                  <img
+                    src={categoria.imagem}
+                    alt={categoria.nome}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+              <CardHeader className="pb-2">
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-4 h-4 rounded-full shrink-0"
+                    style={{ backgroundColor: categoria.cor }}
+                  />
+                  <CardTitle className="line-clamp-1 text-lg">{categoria.nome}</CardTitle>
+                </div>
               </CardHeader>
               <CardContent className="pb-3">
-                <p className="text-xs text-muted-foreground">ID: {categoria.id}</p>
+                <p className="text-xs text-muted-foreground">/categoria/{categoria.slug}</p>
               </CardContent>
               <CardFooter className='flex items-center justify-end gap-2'>
                 <EditCategoria categoria={categoria} />
