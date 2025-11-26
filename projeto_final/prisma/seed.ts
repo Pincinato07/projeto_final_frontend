@@ -3,27 +3,25 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-  console.log('Iniciando seed do banco de dados...')
+  console.log('Populando banco...')
 
-  // Limpar dados existentes
   await prisma.pedidoItem.deleteMany()
   await prisma.pedido.deleteMany()
   await prisma.produto.deleteMany()
   await prisma.categoria.deleteMany()
   await prisma.banner.deleteMany()
 
-  // Criar Banners
-  console.log('Criando banners...')
+  // Banners
   await prisma.banner.createMany({
     data: [
       {
-        titulo: 'Promocao de Inauguracao - 20% OFF em todas as pizzas',
+        titulo: 'Promocao de inauguracao - 20% em todas as pizzas',
         imagem: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=1200&h=400&fit=crop',
         ativo: true,
         ordem: 1,
       },
       {
-        titulo: 'Combo Familia - Pizza Grande + Refrigerante 2L',
+        titulo: 'Combo familia - pizza grande + refri 2L por R$59,90',
         imagem: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=1200&h=400&fit=crop',
         ativo: true,
         ordem: 2,
@@ -31,22 +29,21 @@ async function main() {
     ],
   })
 
-  // Criar Categorias
-  console.log('Criando categorias...')
-  const pizzasTradicionais = await prisma.categoria.create({
+  // Categorias
+  const pizzasTrad = await prisma.categoria.create({
     data: {
       nome: 'Pizzas Tradicionais',
       slug: 'pizzas-tradicionais',
-      cor: '#e63946',
+      cor: '#dc2626',
       imagem: 'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=400&h=400&fit=crop',
     },
   })
 
-  const pizzasEspeciais = await prisma.categoria.create({
+  const pizzasEsp = await prisma.categoria.create({
     data: {
       nome: 'Pizzas Especiais',
       slug: 'pizzas-especiais',
-      cor: '#9d4edd',
+      cor: '#7c3aed',
       imagem: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=400&h=400&fit=crop',
     },
   })
@@ -55,7 +52,7 @@ async function main() {
     data: {
       nome: 'Pizzas Doces',
       slug: 'pizzas-doces',
-      cor: '#f72585',
+      cor: '#db2777',
       imagem: 'https://images.unsplash.com/photo-1481391032119-d89fee407e44?w=400&h=400&fit=crop',
     },
   })
@@ -64,7 +61,7 @@ async function main() {
     data: {
       nome: 'Brotos',
       slug: 'brotos',
-      cor: '#ff9f1c',
+      cor: '#ea580c',
       imagem: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&h=400&fit=crop',
     },
   })
@@ -73,7 +70,7 @@ async function main() {
     data: {
       nome: 'Bebidas',
       slug: 'bebidas',
-      cor: '#00b4d8',
+      cor: '#0891b2',
       imagem: 'https://images.unsplash.com/photo-1581006852262-e4307cf6283a?w=400&h=400&fit=crop',
     },
   })
@@ -82,137 +79,134 @@ async function main() {
     data: {
       nome: 'Sobremesas',
       slug: 'sobremesas',
-      cor: '#fb8500',
+      cor: '#ca8a04',
       imagem: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=400&h=400&fit=crop',
     },
   })
 
-  // Criar Produtos - Pizzas Tradicionais
-  console.log('Criando pizzas tradicionais...')
+  // Pizzas tradicionais
   await prisma.produto.createMany({
     data: [
       {
-        nome: 'Pizza Margherita',
-        descricao: 'Molho de tomate, mussarela, tomate fresco, manjericão e azeite de oliva',
+        nome: 'Margherita',
+        descricao: 'Molho de tomate, mussarela, tomate fresco e manjericao',
         preco: 45.90,
         imagem: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=500&h=500&fit=crop',
-        categoriaId: pizzasTradicionais.id,
+        categoriaId: pizzasTrad.id,
       },
       {
-        nome: 'Pizza Calabresa',
-        descricao: 'Molho de tomate, mussarela, calabresa fatiada e cebola',
+        nome: 'Calabresa',
+        descricao: 'Mussarela, calabresa fatiada e cebola',
         preco: 42.90,
         imagem: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&h=500&fit=crop',
-        categoriaId: pizzasTradicionais.id,
+        categoriaId: pizzasTrad.id,
       },
       {
-        nome: 'Pizza Portuguesa',
-        descricao: 'Molho de tomate, mussarela, presunto, ovos, cebola, azeitona e ervilha',
+        nome: 'Portuguesa',
+        descricao: 'Mussarela, presunto, ovo, cebola, azeitona e ervilha',
         preco: 48.90,
         imagem: 'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=500&h=500&fit=crop',
-        categoriaId: pizzasTradicionais.id,
+        categoriaId: pizzasTrad.id,
       },
       {
-        nome: 'Pizza Quatro Queijos',
-        descricao: 'Molho de tomate, mussarela, provolone, parmesão e gorgonzola',
+        nome: 'Quatro Queijos',
+        descricao: 'Mussarela, provolone, parmesao e gorgonzola',
         preco: 52.90,
         imagem: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&h=500&fit=crop',
-        categoriaId: pizzasTradicionais.id,
+        categoriaId: pizzasTrad.id,
       },
       {
-        nome: 'Pizza Frango com Catupiry',
-        descricao: 'Molho de tomate, mussarela, frango desfiado e catupiry',
+        nome: 'Frango Catupiry',
+        descricao: 'Mussarela, frango desfiado e catupiry',
         preco: 46.90,
         imagem: 'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=500&h=500&fit=crop',
-        categoriaId: pizzasTradicionais.id,
+        categoriaId: pizzasTrad.id,
       },
       {
-        nome: 'Pizza Mussarela',
-        descricao: 'Molho de tomate, mussarela, tomate e orégano',
+        nome: 'Mussarela',
+        descricao: 'Mussarela, tomate e oregano',
         preco: 38.90,
         imagem: 'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=500&h=500&fit=crop',
-        categoriaId: pizzasTradicionais.id,
+        categoriaId: pizzasTrad.id,
       },
     ],
   })
 
-  // Criar Produtos - Pizzas Especiais
-  console.log('Criando pizzas especiais...')
+  // Pizzas especiais
   await prisma.produto.createMany({
     data: [
       {
-        nome: 'Pizza de Carne Seca',
-        descricao: 'Molho de tomate, mussarela, carne seca desfiada, cebola caramelizada e catupiry',
+        nome: 'Carne Seca com Catupiry',
+        descricao: 'Carne seca desfiada, cebola caramelizada e catupiry',
         preco: 58.90,
         imagem: 'https://images.unsplash.com/photo-1595854341625-f33ee10dbf94?w=500&h=500&fit=crop',
-        categoriaId: pizzasEspeciais.id,
+        categoriaId: pizzasEsp.id,
       },
       {
-        nome: 'Pizza Pepperoni',
-        descricao: 'Molho de tomate, mussarela e pepperoni importado',
+        nome: 'Pepperoni',
+        descricao: 'Mussarela e pepperoni',
         preco: 54.90,
         imagem: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?w=500&h=500&fit=crop',
-        categoriaId: pizzasEspeciais.id,
+        categoriaId: pizzasEsp.id,
       },
       {
-        nome: 'Pizza Bacon Supreme',
-        descricao: 'Molho de tomate, mussarela, bacon crocante, cheddar e cebola roxa',
+        nome: 'Bacon',
+        descricao: 'Mussarela, bacon, cheddar e cebola roxa',
         preco: 56.90,
         imagem: 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?w=500&h=500&fit=crop',
-        categoriaId: pizzasEspeciais.id,
+        categoriaId: pizzasEsp.id,
       },
       {
-        nome: 'Pizza Vegetariana',
-        descricao: 'Molho de tomate, mussarela, brócolis, palmito, milho, ervilha e champignon',
+        nome: 'Vegetariana',
+        descricao: 'Mussarela, brocolis, palmito, milho e champignon',
         preco: 49.90,
         imagem: 'https://images.unsplash.com/photo-1511689660979-10d2b1aada49?w=500&h=500&fit=crop',
-        categoriaId: pizzasEspeciais.id,
+        categoriaId: pizzasEsp.id,
       },
       {
-        nome: 'Pizza Camarão',
-        descricao: 'Molho de tomate, mussarela, camarões, alho frito e catupiry',
+        nome: 'Camarao',
+        descricao: 'Mussarela, camarao, alho frito e catupiry',
         preco: 68.90,
         imagem: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&h=500&fit=crop',
-        categoriaId: pizzasEspeciais.id,
+        categoriaId: pizzasEsp.id,
       },
     ],
   })
 
-  // Criar Produtos - Pizzas Doces
-  console.log('Criando pizzas doces...')
+  // Pizzas doces
   await prisma.produto.createMany({
     data: [
       {
-        nome: 'Pizza de Chocolate',
-        descricao: 'Chocolate ao leite derretido com granulado',
+        nome: 'Chocolate',
+        descricao: 'Chocolate ao leite com granulado',
         preco: 42.90,
         imagem: 'https://images.unsplash.com/photo-1481391032119-d89fee407e44?w=500&h=500&fit=crop',
         categoriaId: pizzasDoces.id,
       },
       {
-        nome: 'Pizza de Banana com Canela',
-        descricao: 'Banana, açúcar, canela e leite condensado',
+        nome: 'Banana com Canela',
+        descricao: 'Banana, acucar, canela e leite condensado',
         preco: 38.90,
         imagem: 'https://images.unsplash.com/photo-1528736235302-52922df5c122?w=500&h=500&fit=crop',
         categoriaId: pizzasDoces.id,
       },
       {
-        nome: 'Pizza Romeu e Julieta',
-        descricao: 'Goiabada cremosa com queijo mussarela',
+        nome: 'Romeu e Julieta',
+        descricao: 'Goiabada com mussarela',
         preco: 40.90,
         imagem: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&h=500&fit=crop',
         categoriaId: pizzasDoces.id,
       },
       {
-        nome: 'Pizza de Morango com Nutella',
-        descricao: 'Nutella, morangos frescos e leite condensado',
+        nome: 'Morango com Nutella',
+        descricao: 'Nutella, morango e leite condensado',
         preco: 48.90,
         imagem: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&h=500&fit=crop',
         categoriaId: pizzasDoces.id,
       },
       {
-        nome: 'Pizza de Prestígio',
-        descricao: 'Chocolate ao leite com coco ralado',
+        nome: 'Prestigio',
+        descricao: 'Chocolate com coco ralado',
         preco: 44.90,
         imagem: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=500&h=500&fit=crop',
         categoriaId: pizzasDoces.id,
@@ -220,34 +214,33 @@ async function main() {
     ],
   })
 
-  // Criar Produtos - Brotos
-  console.log('Criando brotos...')
+  // Brotos
   await prisma.produto.createMany({
     data: [
       {
-        nome: 'Broto de Calabresa',
-        descricao: 'Mini pizza com calabresa e cebola',
+        nome: 'Broto Calabresa',
+        descricao: 'Mini pizza de calabresa com cebola',
         preco: 24.90,
         imagem: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&h=500&fit=crop',
         categoriaId: brotos.id,
       },
       {
-        nome: 'Broto de Frango',
-        descricao: 'Mini pizza com frango desfiado e catupiry',
+        nome: 'Broto Frango',
+        descricao: 'Mini pizza de frango com catupiry',
         preco: 26.90,
         imagem: 'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?w=500&h=500&fit=crop',
         categoriaId: brotos.id,
       },
       {
-        nome: 'Broto de Mussarela',
-        descricao: 'Mini pizza com mussarela e orégano',
+        nome: 'Broto Mussarela',
+        descricao: 'Mini pizza de mussarela',
         preco: 22.90,
         imagem: 'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?w=500&h=500&fit=crop',
         categoriaId: brotos.id,
       },
       {
-        nome: 'Broto de Chocolate',
-        descricao: 'Mini pizza doce com chocolate ao leite',
+        nome: 'Broto Chocolate',
+        descricao: 'Mini pizza doce de chocolate',
         preco: 24.90,
         imagem: 'https://images.unsplash.com/photo-1481391032119-d89fee407e44?w=500&h=500&fit=crop',
         categoriaId: brotos.id,
@@ -255,41 +248,40 @@ async function main() {
     ],
   })
 
-  // Criar Produtos - Bebidas
-  console.log('Criando bebidas...')
+  // Bebidas
   await prisma.produto.createMany({
     data: [
       {
         nome: 'Coca-Cola 2L',
-        descricao: 'Refrigerante Coca-Cola 2 litros',
+        descricao: 'Refrigerante 2 litros',
         preco: 12.90,
         imagem: 'https://images.unsplash.com/photo-1629203851122-3726ecdf080e?w=500&h=500&fit=crop',
         categoriaId: bebidas.id,
       },
       {
-        nome: 'Guaraná Antarctica 2L',
-        descricao: 'Refrigerante Guaraná Antarctica 2 litros',
+        nome: 'Guarana 2L',
+        descricao: 'Refrigerante 2 litros',
         preco: 10.90,
         imagem: 'https://images.unsplash.com/photo-1581006852262-e4307cf6283a?w=500&h=500&fit=crop',
         categoriaId: bebidas.id,
       },
       {
-        nome: 'Suco de Laranja 1L',
-        descricao: 'Suco natural de laranja',
+        nome: 'Suco de Laranja',
+        descricao: 'Suco natural 1L',
         preco: 14.90,
         imagem: 'https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?w=500&h=500&fit=crop',
         categoriaId: bebidas.id,
       },
       {
-        nome: 'Água Mineral 500ml',
-        descricao: 'Água mineral sem gás',
+        nome: 'Agua 500ml',
+        descricao: 'Agua mineral sem gas',
         preco: 4.90,
         imagem: 'https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=500&h=500&fit=crop',
         categoriaId: bebidas.id,
       },
       {
-        nome: 'Cerveja Heineken 600ml',
-        descricao: 'Cerveja Heineken Long Neck',
+        nome: 'Heineken 600ml',
+        descricao: 'Cerveja long neck',
         preco: 15.90,
         imagem: 'https://images.unsplash.com/photo-1608270586620-248524c67de9?w=500&h=500&fit=crop',
         categoriaId: bebidas.id,
@@ -297,27 +289,26 @@ async function main() {
     ],
   })
 
-  // Criar Produtos - Sobremesas
-  console.log('Criando sobremesas...')
+  // Sobremesas
   await prisma.produto.createMany({
     data: [
       {
         nome: 'Petit Gateau',
-        descricao: 'Bolinho de chocolate com recheio cremoso, acompanha sorvete',
+        descricao: 'Bolinho de chocolate com sorvete',
         preco: 22.90,
         imagem: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=500&h=500&fit=crop',
         categoriaId: sobremesas.id,
       },
       {
-        nome: 'Brownie com Sorvete',
-        descricao: 'Brownie de chocolate com sorvete de creme e calda',
+        nome: 'Brownie',
+        descricao: 'Brownie com sorvete e calda',
         preco: 19.90,
         imagem: 'https://images.unsplash.com/photo-1564355808539-22fda35bed7e?w=500&h=500&fit=crop',
         categoriaId: sobremesas.id,
       },
       {
-        nome: 'Açaí 500ml',
-        descricao: 'Açaí cremoso com granola, banana e leite condensado',
+        nome: 'Acai 500ml',
+        descricao: 'Acai com granola e banana',
         preco: 24.90,
         imagem: 'https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=500&h=500&fit=crop',
         categoriaId: sobremesas.id,
@@ -325,19 +316,16 @@ async function main() {
     ],
   })
 
-  console.log('Seed concluido com sucesso!')
-  console.log('Resumo:')
-  console.log(`   - ${await prisma.banner.count()} banners`)
-  console.log(`   - ${await prisma.categoria.count()} categorias`)
-  console.log(`   - ${await prisma.produto.count()} produtos`)
+  const totalCat = await prisma.categoria.count()
+  const totalProd = await prisma.produto.count()
+  const totalBanner = await prisma.banner.count()
+
+  console.log(`Pronto! ${totalBanner} banners, ${totalCat} categorias, ${totalProd} produtos`)
 }
 
 main()
   .catch((e) => {
-    console.error('Erro ao executar seed:', e)
+    console.error('Erro:', e)
     process.exit(1)
   })
-  .finally(async () => {
-    await prisma.$disconnect()
-  })
-
+  .finally(() => prisma.$disconnect())
