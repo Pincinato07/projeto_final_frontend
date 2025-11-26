@@ -1,17 +1,19 @@
 'use client'
 
 import Link from 'next/link'
-import { Settings, User } from 'lucide-react'
+import { Settings, User, Pizza } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import CartButton from './cart-button'
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg">
+    <header className="sticky top-0 z-50 bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 text-2xl font-bold">
-          <span className="text-3xl">🍕</span>
-          <span className="hidden sm:inline">Delivery</span>
+        <Link href="/" className="flex items-center gap-3 text-2xl font-bold">
+          <div className="bg-white/20 p-2 rounded-full">
+            <Pizza className="h-6 w-6" />
+          </div>
+          <span className="hidden sm:inline tracking-tight">Pizza Express</span>
         </Link>
         
         <div className="flex items-center gap-2">
@@ -31,4 +33,3 @@ export default function Header() {
     </header>
   )
 }
-

@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import prisma from '@/lib/prisma-client'
+import { Pizza, ChevronRight } from 'lucide-react'
 import Header from './_components/header'
 
 export default async function HomePage() {
@@ -18,7 +19,7 @@ export default async function HomePage() {
   })
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
+    <div className="min-h-screen bg-stone-50">
       <Header />
 
       {/* Hero Banner */}
@@ -30,74 +31,78 @@ export default async function HomePage() {
               alt={banners[0].titulo}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
             <div className="absolute inset-0 flex items-center">
               <div className="container mx-auto px-4">
                 <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white max-w-2xl leading-tight">
                   {banners[0].titulo}
                 </h1>
                 <p className="text-white/80 mt-4 text-lg max-w-xl">
-                  Peça agora e receba em casa com rapidez e qualidade!
+                  Sabor artesanal, entrega rápida. Peça agora!
                 </p>
                 <Link
                   href="#categorias"
-                  className="inline-block mt-6 px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-full transition-all transform hover:scale-105 shadow-lg"
+                  className="inline-flex items-center gap-2 mt-6 px-8 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition-all shadow-lg"
                 >
                   Ver Cardápio
+                  <ChevronRight className="h-5 w-5" />
                 </Link>
               </div>
             </div>
           </div>
         </section>
       ) : (
-        <section className="bg-gradient-to-r from-orange-500 to-red-500 py-16 md:py-24">
+        <section className="bg-gradient-to-br from-red-600 via-red-700 to-red-800 py-20 md:py-28">
           <div className="container mx-auto px-4 text-center text-white">
+            <div className="bg-white/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Pizza className="h-10 w-10" />
+            </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
-              🍕 Bem-vindo ao Delivery
+              Pizza Express
             </h1>
-            <p className="text-xl text-white/90 mb-8">
-              Os melhores sabores na sua casa!
+            <p className="text-xl text-white/90 mb-8 max-w-md mx-auto">
+              As melhores pizzas da cidade, feitas com ingredientes selecionados
             </p>
             <Link
               href="#categorias"
-              className="inline-block px-8 py-3 bg-white text-orange-500 font-semibold rounded-full transition-all transform hover:scale-105 shadow-lg"
+              className="inline-flex items-center gap-2 px-8 py-3 bg-white text-red-600 font-semibold rounded-lg transition-all shadow-lg hover:bg-stone-100"
             >
               Ver Cardápio
+              <ChevronRight className="h-5 w-5" />
             </Link>
           </div>
         </section>
       )}
 
       {/* Categorias */}
-      <section id="categorias" className="container mx-auto px-4 py-12">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
+      <section id="categorias" className="container mx-auto px-4 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-bold text-stone-800">
             Nosso Cardápio
           </h2>
-          <p className="text-gray-500 mt-2">
+          <p className="text-stone-500 mt-2">
             Escolha sua categoria favorita
           </p>
         </div>
         
         {categorias.length === 0 ? (
-          <div className="text-center py-16 bg-white rounded-2xl shadow-sm">
-            <span className="text-6xl mb-4 block">🍽️</span>
-            <p className="text-gray-500 text-lg">
+          <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-stone-200">
+            <Pizza className="h-16 w-16 text-stone-300 mx-auto mb-4" />
+            <p className="text-stone-500 text-lg">
               Nenhuma categoria disponível no momento.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
             {categorias.map((categoria) => (
               <Link
                 key={categoria.id}
                 href={`/categoria/${categoria.slug}`}
                 className="group"
               >
-                <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-xl hover:border-stone-300 transition-all duration-300 transform hover:-translate-y-1">
                   <div
                     className="aspect-square relative overflow-hidden"
-                    style={{ backgroundColor: categoria.cor + '15' }}
                   >
                     {categoria.imagem ? (
                       <img
@@ -107,29 +112,28 @@ export default async function HomePage() {
                       />
                     ) : (
                       <div
-                        className="w-full h-full flex items-center justify-center"
-                        style={{ backgroundColor: categoria.cor + '25' }}
+                        className="w-full h-full flex items-center justify-center bg-stone-100"
                       >
-                        <span className="text-6xl group-hover:scale-125 transition-transform duration-300">🍽️</span>
+                        <Pizza className="h-12 w-12 text-stone-400" />
                       </div>
                     )}
                     <div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
+                      className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-300"
                       style={{ backgroundColor: categoria.cor }}
                     />
                   </div>
                   <div className="p-4">
                     <div className="flex items-center gap-2 mb-1">
                       <div
-                        className="w-3 h-3 rounded-full"
+                        className="w-2 h-2 rounded-full"
                         style={{ backgroundColor: categoria.cor }}
                       />
-                      <h3 className="font-bold text-gray-800 truncate">
+                      <h3 className="font-semibold text-stone-800 truncate text-sm">
                         {categoria.nome}
                       </h3>
                     </div>
-                    <p className="text-sm text-gray-500">
-                      {categoria._count.produtos} {categoria._count.produtos === 1 ? 'produto' : 'produtos'}
+                    <p className="text-xs text-stone-500">
+                      {categoria._count.produtos} {categoria._count.produtos === 1 ? 'item' : 'itens'}
                     </p>
                   </div>
                 </div>
@@ -140,12 +144,19 @@ export default async function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 mt-12">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-2xl mb-2">🍕 Delivery</p>
-          <p className="text-gray-400 text-sm">
-            © 2025 - Todos os direitos reservados
-          </p>
+      <footer className="bg-stone-900 text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-red-600 p-2 rounded-full">
+                <Pizza className="h-5 w-5" />
+              </div>
+              <span className="font-bold text-lg">Pizza Express</span>
+            </div>
+            <p className="text-stone-400 text-sm">
+              2025 Pizza Express. Todos os direitos reservados.
+            </p>
+          </div>
         </div>
       </footer>
     </div>

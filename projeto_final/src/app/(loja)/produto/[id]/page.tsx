@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import prisma from '@/lib/prisma-client'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Pizza } from 'lucide-react'
 import Header from '../../_components/header'
 import AddToCartButton from '../../_components/add-to-cart-button'
 
@@ -30,7 +30,6 @@ export default async function ProdutoPage({
     notFound()
   }
 
-  // Buscar produtos relacionados da mesma categoria
   const produtosRelacionados = await prisma.produto.findMany({
     where: {
       categoriaId: produto.categoriaId,
@@ -41,14 +40,14 @@ export default async function ProdutoPage({
   })
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-orange-50 to-white">
+    <div className="min-h-screen bg-stone-50">
       <Header />
 
       {/* Breadcrumb */}
       <div className="container mx-auto px-4 py-4">
         <Link
           href={`/categoria/${produto.categoria.slug}`}
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-orange-500 transition-colors"
+          className="inline-flex items-center gap-2 text-stone-600 hover:text-red-600 transition-colors text-sm"
         >
           <ArrowLeft className="h-4 w-4" />
           Voltar para {produto.categoria.nome}
@@ -57,7 +56,7 @@ export default async function ProdutoPage({
 
       {/* Produto */}
       <section className="container mx-auto px-4 pb-12">
-        <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-stone-200 overflow-hidden">
           <div className="grid md:grid-cols-2 gap-0">
             {/* Imagem */}
             <div className="relative aspect-square md:aspect-auto">
@@ -68,11 +67,8 @@ export default async function ProdutoPage({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div
-                  className="w-full h-full min-h-[400px] flex items-center justify-center"
-                  style={{ backgroundColor: produto.categoria.cor + '15' }}
-                >
-                  <span className="text-9xl">🍽️</span>
+                <div className="w-full h-full min-h-[400px] flex items-center justify-center bg-stone-100">
+                  <Pizza className="h-24 w-24 text-stone-300" />
                 </div>
               )}
             </div>
@@ -81,37 +77,34 @@ export default async function ProdutoPage({
             <div className="p-8 md:p-12 flex flex-col justify-center">
               <Link
                 href={`/categoria/${produto.categoria.slug}`}
-                className="inline-flex items-center gap-2 text-sm font-medium mb-4 w-fit"
+                className="inline-flex items-center gap-2 text-sm font-medium mb-4 w-fit hover:opacity-80 transition-opacity"
                 style={{ color: produto.categoria.cor }}
               >
                 <div
-                  className="w-3 h-3 rounded-full"
+                  className="w-2 h-2 rounded-full"
                   style={{ backgroundColor: produto.categoria.cor }}
                 />
                 {produto.categoria.nome}
               </Link>
               
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              <h1 className="text-3xl md:text-4xl font-bold text-stone-800 mb-4">
                 {produto.nome}
               </h1>
 
               {produto.descricao && (
                 <div className="mb-6">
-                  <h2 className="font-semibold text-gray-700 mb-2">Descrição</h2>
-                  <p className="text-gray-600 leading-relaxed">
+                  <h2 className="font-semibold text-stone-700 mb-2">Descrição</h2>
+                  <p className="text-stone-600 leading-relaxed">
                     {produto.descricao}
                   </p>
                 </div>
               )}
 
-              <div className="mt-auto pt-6 border-t">
+              <div className="mt-auto pt-6 border-t border-stone-200">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                   <div>
-                    <p className="text-sm text-gray-500 mb-1">Preço</p>
-                    <p
-                      className="text-4xl font-bold"
-                      style={{ color: produto.categoria.cor }}
-                    >
+                    <p className="text-sm text-stone-500 mb-1">Preço</p>
+                    <p className="text-4xl font-bold text-red-600">
                       {formatCurrency(produto.preco)}
                     </p>
                   </div>
@@ -133,7 +126,7 @@ export default async function ProdutoPage({
       {/* Produtos Relacionados */}
       {produtosRelacionados.length > 0 && (
         <section className="container mx-auto px-4 py-12">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          <h2 className="text-2xl font-bold text-stone-800 mb-6">
             Você também pode gostar
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -141,29 +134,26 @@ export default async function ProdutoPage({
               <Link
                 key={prod.id}
                 href={`/produto/${prod.id}`}
-                className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-all group"
+                className="bg-white rounded-xl overflow-hidden shadow-sm border border-stone-200 hover:shadow-lg hover:border-stone-300 transition-all group"
               >
                 {prod.imagem ? (
                   <div className="aspect-video overflow-hidden">
                     <img
                       src={prod.imagem}
                       alt={prod.nome}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                   </div>
                 ) : (
-                  <div
-                    className="aspect-video flex items-center justify-center"
-                    style={{ backgroundColor: produto.categoria.cor + '15' }}
-                  >
-                    <span className="text-3xl">🍽️</span>
+                  <div className="aspect-video flex items-center justify-center bg-stone-100">
+                    <Pizza className="h-8 w-8 text-stone-300" />
                   </div>
                 )}
                 <div className="p-3">
-                  <h3 className="font-semibold text-gray-800 truncate group-hover:text-orange-500 transition-colors">
+                  <h3 className="font-semibold text-stone-800 truncate group-hover:text-red-600 transition-colors text-sm">
                     {prod.nome}
                   </h3>
-                  <p className="text-orange-500 font-bold mt-1">
+                  <p className="text-red-600 font-bold mt-1">
                     {formatCurrency(prod.preco)}
                   </p>
                 </div>
@@ -174,12 +164,19 @@ export default async function ProdutoPage({
       )}
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 mt-12">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-2xl mb-2">🍕 Delivery</p>
-          <p className="text-gray-400 text-sm">
-            © 2025 - Todos os direitos reservados
-          </p>
+      <footer className="bg-stone-900 text-white py-12 mt-12">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-red-600 p-2 rounded-full">
+                <Pizza className="h-5 w-5" />
+              </div>
+              <span className="font-bold text-lg">Pizza Express</span>
+            </div>
+            <p className="text-stone-400 text-sm">
+              2025 Pizza Express. Todos os direitos reservados.
+            </p>
+          </div>
         </div>
       </footer>
     </div>

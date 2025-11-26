@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
-  console.log('🌱 Iniciando seed do banco de dados...')
+  console.log('Iniciando seed do banco de dados...')
 
   // Limpar dados existentes
   await prisma.pedidoItem.deleteMany()
@@ -13,17 +13,17 @@ async function main() {
   await prisma.banner.deleteMany()
 
   // Criar Banners
-  console.log('📸 Criando banners...')
+  console.log('Criando banners...')
   await prisma.banner.createMany({
     data: [
       {
-        titulo: '🍕 Promoção de Inauguração - 20% OFF',
+        titulo: 'Promocao de Inauguracao - 20% OFF em todas as pizzas',
         imagem: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=1200&h=400&fit=crop',
         ativo: true,
         ordem: 1,
       },
       {
-        titulo: 'Combo Família - Pizza Grande + Refrigerante',
+        titulo: 'Combo Familia - Pizza Grande + Refrigerante 2L',
         imagem: 'https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=1200&h=400&fit=crop',
         ativo: true,
         ordem: 2,
@@ -32,7 +32,7 @@ async function main() {
   })
 
   // Criar Categorias
-  console.log('📁 Criando categorias...')
+  console.log('Criando categorias...')
   const pizzasTradicionais = await prisma.categoria.create({
     data: {
       nome: 'Pizzas Tradicionais',
@@ -88,7 +88,7 @@ async function main() {
   })
 
   // Criar Produtos - Pizzas Tradicionais
-  console.log('🍕 Criando pizzas tradicionais...')
+  console.log('Criando pizzas tradicionais...')
   await prisma.produto.createMany({
     data: [
       {
@@ -137,7 +137,7 @@ async function main() {
   })
 
   // Criar Produtos - Pizzas Especiais
-  console.log('⭐ Criando pizzas especiais...')
+  console.log('Criando pizzas especiais...')
   await prisma.produto.createMany({
     data: [
       {
@@ -179,7 +179,7 @@ async function main() {
   })
 
   // Criar Produtos - Pizzas Doces
-  console.log('🍫 Criando pizzas doces...')
+  console.log('Criando pizzas doces...')
   await prisma.produto.createMany({
     data: [
       {
@@ -221,7 +221,7 @@ async function main() {
   })
 
   // Criar Produtos - Brotos
-  console.log('🥟 Criando brotos...')
+  console.log('Criando brotos...')
   await prisma.produto.createMany({
     data: [
       {
@@ -256,7 +256,7 @@ async function main() {
   })
 
   // Criar Produtos - Bebidas
-  console.log('🥤 Criando bebidas...')
+  console.log('Criando bebidas...')
   await prisma.produto.createMany({
     data: [
       {
@@ -298,7 +298,7 @@ async function main() {
   })
 
   // Criar Produtos - Sobremesas
-  console.log('🍰 Criando sobremesas...')
+  console.log('Criando sobremesas...')
   await prisma.produto.createMany({
     data: [
       {
@@ -325,8 +325,8 @@ async function main() {
     ],
   })
 
-  console.log('✅ Seed concluído com sucesso!')
-  console.log('📊 Resumo:')
+  console.log('Seed concluido com sucesso!')
+  console.log('Resumo:')
   console.log(`   - ${await prisma.banner.count()} banners`)
   console.log(`   - ${await prisma.categoria.count()} categorias`)
   console.log(`   - ${await prisma.produto.count()} produtos`)
@@ -334,7 +334,7 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error('❌ Erro ao executar seed:', e)
+    console.error('Erro ao executar seed:', e)
     process.exit(1)
   })
   .finally(async () => {
