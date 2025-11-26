@@ -1,33 +1,50 @@
 'use client'
 
-import { ShoppingCart } from 'lucide-react'
+import { Plus, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useCart } from '@/contexts/cart-context'
-import { toast } from 'sonner'
+import { useState } from 'react'
 
-type Produto = {
-  id: string
-  nome: string
-  preco: number
-  imagem: string | null
+interface Props {
+  produto: {
+    id: string
+    nome: string
+    preco: number
+    imagem: string | null
+  }
 }
 
-export default function AddToCartButton({ produto }: { produto: Produto }) {
+export default function AddToCartButton({ produto }: Props) {
   const { addItem } = useCart()
+  const [added, setAdded] = useState(false)
 
-  function handleAddToCart() {
+  function handleAdd() {
     addItem(produto)
-    toast.success(`${produto.nome} adicionado ao carrinho!`)
+    setAdded(true)
+    setTimeout(() => setAdded(false), 1500)
   }
 
   return (
     <Button
+      onClick={handleAdd}
       size="sm"
-      onClick={handleAddToCart}
-      className="bg-red-600 hover:bg-red-700 text-white rounded-lg px-4"
+      className={`rounded-full transition-all ${
+        added
+          ? 'bg-green-500 hover:bg-green-500'
+          : 'bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-500 hover:to-orange-400'
+      }`}
     >
-      <ShoppingCart className="h-4 w-4 mr-1" />
-      Adicionar
+      {added ? (
+        <>
+          <Check className="h-4 w-4 mr-1" />
+          Adicionado
+        </>
+      ) : (
+        <>
+          <Plus className="h-4 w-4 mr-1" />
+          Adicionar
+        </>
+      )}
     </Button>
   )
 }

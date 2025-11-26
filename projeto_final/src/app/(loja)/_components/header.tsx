@@ -7,23 +7,25 @@ import CartButton from './cart-button'
 
 export default function Header() {
   return (
-    <header className="sticky top-0 z-50 bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg">
-      <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3 text-2xl font-bold">
-          <div className="bg-white/20 p-2 rounded-full">
-            <Pizza className="h-6 w-6" />
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-amber-100 shadow-sm">
+      <div className="container mx-auto px-6 py-3 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="w-9 h-9 bg-gradient-to-br from-red-600 to-orange-500 rounded-full flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+            <Pizza className="h-5 w-5 text-white" />
           </div>
-          <span className="hidden sm:inline tracking-tight">Pizza Express</span>
+          <span className="font-bold text-lg text-stone-800 hidden sm:inline">
+            Pizza Express
+          </span>
         </Link>
         
-        <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="icon" className="text-white hover:bg-white/20">
-            <Link href="/login" title="Área do Cliente">
+        <div className="flex items-center gap-1">
+          <Button asChild variant="ghost" size="icon" className="text-stone-500 hover:text-stone-800 hover:bg-amber-50 rounded-full">
+            <Link href="/login">
               <User className="h-5 w-5" />
             </Link>
           </Button>
-          <Button asChild variant="ghost" size="icon" className="text-white hover:bg-white/20">
-            <Link href="/painel" title="Painel Administrativo">
+          <Button asChild variant="ghost" size="icon" className="text-stone-500 hover:text-stone-800 hover:bg-amber-50 rounded-full">
+            <Link href="/painel">
               <Settings className="h-5 w-5" />
             </Link>
           </Button>
