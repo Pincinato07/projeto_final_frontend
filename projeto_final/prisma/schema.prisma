@@ -71,23 +71,27 @@ model Verification {
 }
 
 model Categoria {
-  id       String   @id @default(uuid())
+  id       String    @id @default(uuid())
   nome     String
+  slug     String    @unique
+  cor      String    @default("#3b82f6")
+  imagem   String?
   produtos Produto[]
 
   @@map("categoria")
 }
 
 model Produto {
-  id          String    @id @default(uuid())
+  id          String       @id @default(uuid())
   nome        String
   descricao   String?
   preco       Float
+  imagem      String?
   categoriaId String
-  categoria   Categoria @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
+  categoria   Categoria    @relation(fields: [categoriaId], references: [id], onDelete: Cascade)
   pedidoItems PedidoItem[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   @@map("produto")
 }
@@ -95,6 +99,7 @@ model Produto {
 model Pedido {
   id          String       @id @default(uuid())
   clienteNome String
+  email       String?
   endereco    String
   telefone    String
   itens       PedidoItem[]
@@ -115,4 +120,16 @@ model PedidoItem {
   preco      Float
 
   @@map("pedido_item")
+}
+
+model Banner {
+  id        String   @id @default(uuid())
+  titulo    String
+  imagem    String
+  ativo     Boolean  @default(true)
+  ordem     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("banner")
 }
